@@ -1,43 +1,41 @@
-Criptografía-RSA
-===
-
-Este es un proyecto para el electivo de Criptografía Aplicada, el cual que consiste en tres programas escritos en Python
-con el objetivo de implementar la [encriptación RSA](https://es.wikipedia.org/wiki/RSA) en un contexto práctico.
-
-La implementación lograda es más bien minimal, y sirve para ilustrar perfectamente el proceso de encriptación de
-mensajes en texto plano utilizando las llaves RSA de dos usuarios.
-
-Programas
----
-
-El proyecto cuenta con tres scripts de Python:
-
-  1. keygen.py: Genera pares de llaves RSA.
-  2. cipher.py: Cifra texto plano utilizando una llave RSA privada del emisor y la llave pública del receptor.
-  3. decipher.py: Descifra texto cifrado utilizando la llave privada del receptor y la llave pública del emisor.
-
-### keygen.py
-
-    Generar par de llaves RSA
-
-### cipher.py
-
-    Cifrar mensajes (RSA)
-
-    argumentos posicionales:
-      --private-key                   Llave RSA privada
-      --public-key                    Llave RSA publica
-
-### decipher.py
-
-    Descifrar mensajes (RSA)
-
-    argumentos posicionales:
-      --public-key                    Llave RSA publica
-      --private-key                   Llave RSA privada
-
-Autores
----
-
-  - José Benavente
-  - Daniel Aguayo
+#                             Criptografía-RSA
+#
+#   === Autores ===
+#
+#   José Benavente
+#   Daniel Aguayo
+#
+#   === Descripción ===
+#
+#   Este es un proyecto para el electivo de Criptografía Aplicada, el cual
+#   consiste en tres programas escritos en Python con el objetivo de implementar
+#   la encriptación RSA en un contexto práctico.
+#
+#   === Uso ===
+#
+#   python keygen.py
+#   python ciper.py --private-key llave_alice.pem --public-key llave_bob.pub
+#   python deciper.py --public-key llave_alice.pub --private-key llave_bob.pem
+#
+#   === Explicación ===
+#
+#   Primero, ambos usuarios ejecutan el script keygen.py, el cual generará un
+#   par de llaves RSA (pública y privada) para cada uno. Llamaremos a ambos
+#   usuarios Alice y Bob, por simplicidad.
+#
+#   Luego de generar las llaves, ambos usuarios intercambian llaves públicas.
+#   Alice le envía su llave pública a Bob, y viceversa.
+#
+#   Después de generar las llaves y hacer el intercambio de las públicas, Alice
+#   puede encriptar un mensaje utilizando el script cipher.py, pasando su
+#   llave privada y la llave pública de Bob como argumentos al script.
+#
+#   Una vez encriptado el mensaje, se generarán varios archivos en el directorio
+#   cipher/: aes_key.enc, ciphertext.txt, IV.iv y signature.sig. Estos archivos
+#   deberán ser enviados a Bob para que, con su llave privada, pueda descencritpar
+#   el mensaje encriptado por Alice.
+#
+#   Para descencriptar el mensaje, Bob puede usar el script decipher.py, pasando la
+#   llave pública de Alice y su llave privada como argumentos al script. Los archivos
+#   originalmente generados por Alice deben encontrarse en el directorio decipher/
+#   antes de proceder con la desencriptación.
