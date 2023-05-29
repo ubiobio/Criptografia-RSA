@@ -21,24 +21,28 @@
 #
 #   Primero, ambos usuarios ejecutan el script keygen.py, el cual generará un
 #   par de llaves RSA (pública y privada) para cada uno. Llamaremos a ambos
-#   usuarios Alice y Bob, por simplicidad.
+#   usuarios Alice y Bob para esta demostración.
 #
 #   Luego de generar las llaves, ambos usuarios intercambian llaves públicas.
 #   Alice le envía su llave pública a Bob, y viceversa.
 #
 #   Después de generar las llaves y hacer el intercambio de las públicas, Alice
 #   puede encriptar un mensaje utilizando el script cipher.py, pasando su
-#   llave privada y la llave pública de Bob como argumentos al script.
+#   llave privada y la llave pública de Bob como argumentos.
 #
 #   Una vez encriptado el mensaje, se generarán varios archivos en el directorio
 #   cipher/: aes_key.enc, ciphertext.txt, IV.iv y signature.sig. Estos archivos
-#   deberán ser enviados a Bob para que, con su llave privada, pueda desencritpar
-#   el mensaje encriptado por Alice.
+#   deberán ser enviados a Bob para que este, con su llave privada, pueda
+#   desencritpar el mensaje encriptado por Alice.
 #
 #   Para desencriptar el mensaje, Bob puede usar el script decipher.py, pasando la
-#   llave pública de Alice y su llave privada como argumentos al script. Los archivos
+#   llave pública de Alice y su llave privada como argumentos. Los archivos
 #   originalmente generados por Alice deben encontrarse en el directorio decipher/
-#   antes de proceder con la desencriptación.
+#   de Bob antes de proceder con la desencriptación.
+#
+#   Una vez ejecutado el script decipher.py, el mensaje podrá ser visto en pantalla,
+#   así como también una confirmación de que el mensaje es genuino, o si este puede
+#   haber sido alterado en algún momento.
 #
 #   === Referencias ===
 #    * https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/
