@@ -106,8 +106,8 @@ def main():
 
     signature = sign_text(plaintext, private_key)
 
-    with open("cipher/signature.sig", "w") as signature_file:
-        print(signature, file=signature_file)
+    with open("cipher/signature.sig", "wb") as signature_file:
+        signature_file.write(signature)
 
     # Generar llave AES y vector IV
     aes_key = os.urandom(32)
