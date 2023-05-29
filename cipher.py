@@ -8,7 +8,10 @@
 #   --private-key                   Llave RSA privada
 #   --public-key                    Llave RSA publica
 #
+# pylint: disable=deprecated-module, unused-variable, missing-module-docstring
+#
 
+import sys
 import os
 import optparse
 
@@ -70,18 +73,18 @@ def encrypt_aes_key(aes_key, public_key):
     return encrypted_key
 
 
-def encrypt_text(text, key, iv):
+def encrypt_text(text, key, iv_vector):
     """Encripta texto plano utilizando una llave AES y el vector IV en modo CBC.
 
     Argumentos:
     text -- texto plano
     key -- llave AES
-    iv -- vector IV
+    iv_vector -- vector IV
     """
     padder = sym_padding.PKCS7(algorithms.AES.block_size).padder()
     padded_data = padder.update(text) + padder.finalize()
 
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv_vector), backend=default_backend())
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
 
@@ -111,22 +114,22 @@ def main():
     """Cifrador RSA
     """
 
-    p = optparse.OptionParser("%prog --private-key [path] --public-key [path]")
-    p.add_option('--private-key', dest='private_key', type='string')
-    p.add_option('--public-key', dest='public_key', type='string')
-    options, arguments = p.parse_args()
+    parser = optparse.OptionParser("%prog --private-key [path] --public-key [path]")
+    parser.add_option('--private-key', dest='private_key', type='string')
+    parser.add_option('--public-key', dest='public_key', type='string')
+    options, arguments = parser.parse_args()
 
     if not options.private_key:
-        p.error("No se ingresó una llave privada.")
-        p.print_usage()
-        exit(0)
+        parser.error("No se ingresó una llave privada.")
+        parser.print_usage()
+        sys.exit(0)
 
     if not options.public_key:
-        p.error("No se ingresó una llave pública.")
-        p.print_usage()
-        exit(0)
+        parser.error("No se ingresó una llave pública.")
+        parser.print_usage()
+        sys.exit(0)
 
-    plaintext = input(f"Ingresa un mensaje para enviar: ").encode()
+    plaintext = input("Ingresa un mensaje para enviar: ").encode()
     private_key = read_private_key(options.private_key)
     public_key = read_public_key(options.public_key)
 
@@ -137,10 +140,10 @@ def main():
 
     # Generar llave AES y vector IV
     aes_key = os.urandom(32)
-    iv = os.urandom(16)
+    iv_vector = os.urandom(16)
 
     # Cifrar el texto plano en modo CBC con AES
-    ciphertext = encrypt_text(plaintext, aes_key, iv)
+    ciphertext = encrypt_text(plaintext, aes_key, iv_vector)
 
     # Escribir el texto cifrado en un archivo
     with open('cipher/ciphertext.txt', 'wb') as ciphertext_file:
@@ -148,7 +151,7 @@ def main():
 
     # Escribir el vector IV en un archivo
     with open('cipher/IV.iv', 'wb') as iv_file:
-        iv_file.write(iv)
+        iv_file.write(iv_vector)
 
     # Cifrar la llave AES con la llave pública
     encrypted_key = encrypt_aes_key(aes_key, public_key)

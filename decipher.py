@@ -8,7 +8,10 @@
 #   --public-key                    Llave RSA publica
 #   --private-key                   Llave RSA privada
 #
+# pylint: disable=deprecated-module, unused-variable, missing-module-docstring, broad-exception-caught, too-many-locals
+#
 
+import sys
 import optparse
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -29,6 +32,12 @@ def read_file(filename):
 
 
 def decrypt_aes(encrypted_aes_key, private_key):
+    """Desencriptar llave AES utilizando llave RSA privada.
+
+    Argumentos:
+    encrypted_aes_key -- llave AES encriptada
+    private_key -- llave RSA privada
+    """
     plaintext = private_key.decrypt(
         encrypted_aes_key,
         asymmetric_padding.OAEP(
@@ -40,14 +49,14 @@ def decrypt_aes(encrypted_aes_key, private_key):
     return plaintext
 
 
-def decrypt_ciphertext(ciphertext, aes_key, iv):
+def decrypt_ciphertext(ciphertext, aes_key, iv_vector):
     """Desencriptar mensaje encriptado con llave AES y vector IV.
 
     ciphertext -- texto cifrado
     aes_key -- llave AES
     iv -- vector IV
     """
-    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv))
+    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv_vector))
     decryptor = cipher.decryptor()
     padded_plaintext = decryptor.update(ciphertext) + decryptor.finalize()
 
@@ -78,20 +87,20 @@ def verify_signature(message, signature, public_key):
 def main():
     """Descifrar un mensaje con llave RSA"""
 
-    p = optparse.OptionParser("%prog --public-key [path] --private-key [path]")
-    p.add_option('--public-key', dest='public_key', type='string')
-    p.add_option('--private-key', dest='private_key', type='string')
-    options, arguments = p.parse_args()
+    parser = optparse.OptionParser("%prog --public-key [path] --private-key [path]")
+    parser.add_option('--public-key', dest='public_key', type='string')
+    parser.add_option('--private-key', dest='private_key', type='string')
+    options, arguments = parser.parse_args()
 
     if not options.public_key:
-        p.error("No se ingresó una llave pública.")
-        p.print_usage()
-        exit(0)
+        parser.error("No se ingresó una llave pública.")
+        parser.print_usage()
+        sys.exit()
 
     if not options.private_key:
-        p.error("No se ingresó una llave privada.")
-        p.print_usage()
-        exit(0)
+        parser.error("No se ingresó una llave privada.")
+        parser.print_usage()
+        sys.exit()
 
     message_filename = "decipher/ciphertext.txt"
     signature_filename = "decipher/signature.sig"
@@ -104,7 +113,7 @@ def main():
     message = read_file(message_filename)
     signature = read_file(signature_filename)
     encrypted_aes_key = read_file(encrypted_aes_key_filename)
-    iv = read_file(iv_filename)
+    iv_vector = read_file(iv_filename)
 
     # Cargar llave RSA pública
     with open(alice_public_key_filename, "rb") as key_file:
@@ -123,7 +132,7 @@ def main():
     aes_key = decrypt_aes(encrypted_aes_key, bob_private_key)
 
     # Descifrar texto cifrado con la llave AES
-    plaintext = decrypt_ciphertext(message, aes_key, iv)
+    plaintext = decrypt_ciphertext(message, aes_key, iv_vector)
 
     try:
         # Verificar la firma del mensaje
@@ -131,9 +140,9 @@ def main():
         print("La firma es válida. El mensaje es genuino.")
         print("Contenido del mensaje:")
         print(plaintext.decode())
-    except Exception as e:
+    except Exception as exception:
         print("La firma no es válida. El mensaje puede no ser genuino.")
-        print("Error:", e)
+        print("Error:", exception)
 
 
 if __name__ == '__main__':
