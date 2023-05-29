@@ -14,14 +14,18 @@
 #   === Uso ===
 #
 #   python keygen.py
-#   python ciper.py --private-key llave_alice.pem --public-key llave_bob.pub
-#   python deciper.py --public-key llave_alice.pub --private-key llave_bob.pem
+#   python ciper.py --private-key llave_alice.pem --public-key llave_bob.pub -p [password]
+#   python deciper.py --public-key llave_alice.pub --private-key llave_bob.pem -p [password]
 #
 #   === Explicación ===
 #
 #   Primero, ambos usuarios ejecutan el script keygen.py, el cual generará un
 #   par de llaves RSA (pública y privada) para cada uno. Llamaremos a ambos
 #   usuarios Alice y Bob para esta demostración.
+#
+#   Opcionalmente las llaves RSA pueden ser generadas con una contraseña. En caso
+#   de ser así, para poder cifrar y descifrar mensajes Alice y Bob deberán pasar
+#   sus contraseñas como el argumento -p a los scripts de cipher.py y decipher.py
 #
 #   Luego de generar las llaves, ambos usuarios intercambian llaves públicas.
 #   Alice le envía su llave pública a Bob, y viceversa.

@@ -8,6 +8,9 @@
 #   --public-key                    Llave RSA publica
 #   --private-key                   Llave RSA privada
 #
+# argumentos opcionales:
+#   -p                              Contraseña de la llave RSA privada
+#
 # pylint: disable=deprecated-module, unused-variable, missing-module-docstring, broad-exception-caught, too-many-locals
 #
 
@@ -90,6 +93,7 @@ def main():
     parser = optparse.OptionParser("%prog --public-key [path] --private-key [path]")
     parser.add_option('--public-key', dest='public_key', type='string')
     parser.add_option('--private-key', dest='private_key', type='string')
+    parser.add_option("-p", dest='password', type="string")
     options, arguments = parser.parse_args()
 
     if not options.public_key:
@@ -101,6 +105,11 @@ def main():
         parser.error("No se ingresó una llave privada.")
         parser.print_usage()
         sys.exit()
+
+    if not options.password:
+        options.password = None
+    else:
+        options.password = options.password.encode()
 
     message_filename = "decipher/ciphertext.txt"
     signature_filename = "decipher/signature.sig"
@@ -125,7 +134,7 @@ def main():
     with open(bob_private_key_filename, "rb") as key_file:
         bob_private_key = serialization.load_pem_private_key(
             key_file.read(),
-            password=None
+            password=options.password
         )
 
     # Descifrar llave AES cifrada con una llave privada

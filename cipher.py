@@ -8,6 +8,9 @@
 #   --private-key                   Llave RSA privada
 #   --public-key                    Llave RSA publica
 #
+# argumentos opcionales:
+#   -p                              Contraseña de la llave RSA privada
+#
 # pylint: disable=deprecated-module, unused-variable, missing-module-docstring
 #
 
@@ -117,6 +120,7 @@ def main():
     parser = optparse.OptionParser("%prog --private-key [path] --public-key [path]")
     parser.add_option('--private-key', dest='private_key', type='string')
     parser.add_option('--public-key', dest='public_key', type='string')
+    parser.add_option("-p", dest='password', type='string')
     options, arguments = parser.parse_args()
 
     if not options.private_key:
@@ -129,8 +133,13 @@ def main():
         parser.print_usage()
         sys.exit(0)
 
+    if not options.password:
+        options.password = None
+    else:
+        options.password = options.password.encode()
+
     plaintext = input("Ingresa un mensaje para enviar: ").encode()
-    private_key = read_private_key(options.private_key)
+    private_key = read_private_key(options.private_key, options.password)
     public_key = read_public_key(options.public_key)
 
     signature = sign_text(plaintext, private_key)
