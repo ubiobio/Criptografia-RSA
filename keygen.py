@@ -9,6 +9,7 @@
 
 import sys
 import os
+import getpass
 
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
@@ -49,8 +50,8 @@ def main():
     passphrase = ""
     attempts = MAX_PASSPHRASE_ATTEMPTS
     while attempts:
-        passphrase = input("Ingresa una contraseña (vacío para sin contraseña): ")
-        passphrase_confirm = input("Ingresa la misma contraseña otra vez: ")
+        passphrase = getpass.getpass("Ingresa una contraseña (vacío para sin contraseña): ")
+        passphrase_confirm = getpass.getpass("Ingresa la misma contraseña otra vez: ")
         if passphrase == passphrase_confirm:
             break
 
