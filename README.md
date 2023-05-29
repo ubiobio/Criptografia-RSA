@@ -65,12 +65,6 @@ mensaje es auténtico.
 Si el mensaje ha sido alterado, el programa imprimirá que el mensaje puede no
 ser auténtico y terminará su ejecución.
 
-Autores
----
-* José Benavente
-* Daniel Aguayo
-
-
 Referencias
 ---
 * https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/
