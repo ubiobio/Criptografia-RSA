@@ -32,10 +32,10 @@
 #
 #   Una vez encriptado el mensaje, se generarán varios archivos en el directorio
 #   cipher/: aes_key.enc, ciphertext.txt, IV.iv y signature.sig. Estos archivos
-#   deberán ser enviados a Bob para que, con su llave privada, pueda descencritpar
+#   deberán ser enviados a Bob para que, con su llave privada, pueda desencritpar
 #   el mensaje encriptado por Alice.
 #
-#   Para descencriptar el mensaje, Bob puede usar el script decipher.py, pasando la
+#   Para desencriptar el mensaje, Bob puede usar el script decipher.py, pasando la
 #   llave pública de Alice y su llave privada como argumentos al script. Los archivos
 #   originalmente generados por Alice deben encontrarse en el directorio decipher/
 #   antes de proceder con la desencriptación.
