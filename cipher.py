@@ -160,6 +160,8 @@ def main():
     with open('cipher/aes_key.enc', 'wb') as encrypted_key_file:
         encrypted_key_file.write(encrypted_key)
 
+    print("Mensaje cifrado con éxito!")
+
 
 if __name__ == '__main__':
     main()
