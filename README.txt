@@ -40,9 +40,13 @@
 #   originalmente generados por Alice deben encontrarse en el directorio decipher/
 #   de Bob antes de proceder con la desencriptación.
 #
-#   Una vez ejecutado el script decipher.py, el mensaje podrá ser visto en pantalla,
-#   así como también una confirmación de que el mensaje es genuino, o si este puede
-#   haber sido alterado en algún momento.
+#   Una vez ejecutado el script decipher.py, Bob podrá ver el mensaje en pantalla.
+#   Si el mensaje no fue alterado, entonces el script entregará el contenido en
+#   texto plano para que Bob pueda verlo, además de mostrar en pantalla que el
+#   mensaje es auténtico.
+#
+#   Si el mensaje ha sido alterado, el programa imprimirá que el mensaje puede no
+#   ser auténtico y terminará su ejecución.
 #
 #   === Referencias ===
 #    * https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/
