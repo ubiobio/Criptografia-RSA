@@ -39,3 +39,12 @@
 #   llave pública de Alice y su llave privada como argumentos al script. Los archivos
 #   originalmente generados por Alice deben encontrarse en el directorio decipher/
 #   antes de proceder con la desencriptación.
+#
+#   === Referencias ===
+#     * https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/
+#     * https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/
+#     * https://machinelearningmastery.com/command-line-arguments-for-your-python-script/
+#     * https://peps.python.org/pep-0257/
+#     * https://pypi.org/project/pylint/
+#     * http://users.ece.cmu.edu/~adrian/projects/validation/validation.pdf
+#
