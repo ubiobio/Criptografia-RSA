@@ -45,6 +45,6 @@
 #    * https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/
 #    * https://machinelearningmastery.com/command-line-arguments-for-your-python-script/
 #    * https://peps.python.org/pep-0257/
-#    * https://pypi.org/project/pylint/
+#    * https://pylint.readthedocs.io/en/latest/
 #    * http://users.ece.cmu.edu/~adrian/projects/validation/validation.pdf
 #
