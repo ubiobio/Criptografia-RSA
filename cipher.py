@@ -20,8 +20,12 @@ from cryptography.hazmat.primitives import padding as sym_padding
 
 
 def read_private_key(file, password=None):
-    """Lee una llave privada desde un archivo PEM."""
+    """Lee una llave privada desde un archivo PEM.
 
+    Argumentos:
+    file -- archivo de la llave privada
+    password -- contraseña de la llave privada (default: None)
+    """
     with open(file, "rb") as key_file:
         private_key = serialization.load_pem_private_key(
             key_file.read(),
@@ -33,18 +37,27 @@ def read_private_key(file, password=None):
 
 
 def read_public_key(file):
-    """Lee una llave publica."""
+    """Lee una llave RSA pública.
 
+    Argumentos:
+    file -- archivo de la llave RSA pública
+    """
     with open(file, 'rb') as key_file:
         public_key = serialization.load_pem_public_key(
             key_file.read(),
             backend=default_backend()
         )
+
     return public_key
 
 
 def encrypt_aes_key(aes_key, public_key):
-    """Cifrar una llave AES con una llave publica."""
+    """Encripta una llave AES con una llave RSA pública.
+
+    Argumentos:
+    aes_key -- llave AES
+    public_key -- llave RSA pública
+    """
     encrypted_key = public_key.encrypt(
         aes_key,
         padding.OAEP(
@@ -53,11 +66,18 @@ def encrypt_aes_key(aes_key, public_key):
             label=None
         )
     )
+
     return encrypted_key
 
 
 def encrypt_text(text, key, iv):
-    # Cifrar el texto usando AES en modo CBC
+    """Encripta texto plano utilizando una llave AES y el vector IV en modo CBC.
+
+    Argumentos:
+    text -- texto plano
+    key -- llave AES
+    iv -- vector IV
+    """
     padder = sym_padding.PKCS7(algorithms.AES.block_size).padder()
     padded_data = padder.update(text) + padder.finalize()
 
@@ -69,7 +89,12 @@ def encrypt_text(text, key, iv):
 
 
 def sign_text(text, private_key):
-    """Firmar texto usando una llave privada."""
+    """Firma text plano utilizando una llave privada.
+
+    Argumentos:
+    text -- texto plano
+    private_key -- llave RSA privada
+    """
     signature = private_key.sign(
         text,
         padding.PSS(
@@ -78,11 +103,12 @@ def sign_text(text, private_key):
         ),
         hashes.SHA256()
     )
+
     return signature
 
 
 def main():
-    """Cifrar un mensaje con llave RSA
+    """Cifrador RSA
     """
 
     p = optparse.OptionParser("%prog --private-key [path] --public-key [path]")
@@ -101,8 +127,8 @@ def main():
         exit(0)
 
     plaintext = input(f"Ingresa un mensaje para enviar: ").encode()
-    private_key = read_private_key(options.private_key)  # Alice
-    public_key = read_public_key(options.public_key)  # Bob
+    private_key = read_private_key(options.private_key)
+    public_key = read_public_key(options.public_key)
 
     signature = sign_text(plaintext, private_key)
 
@@ -117,7 +143,7 @@ def main():
     ciphertext = encrypt_text(plaintext, aes_key, iv)
 
     # Escribir el texto cifrado en un archivo
-    with open('cipher/TextoCifrado.txt', 'wb') as ciphertext_file:
+    with open('cipher/ciphertext.txt', 'wb') as ciphertext_file:
         ciphertext_file.write(ciphertext)
 
     # Escribir el vector IV en un archivo
@@ -127,8 +153,8 @@ def main():
     # Cifrar la llave AES con la llave pública
     encrypted_key = encrypt_aes_key(aes_key, public_key)
 
-    # Almacenar la llave AES cifrada en otro archivo
-    with open('cipher/llave_AES_cifrada.key', 'wb') as encrypted_key_file:
+    # Almacenar la llave AES cifrada
+    with open('cipher/aes_key.enc', 'wb') as encrypted_key_file:
         encrypted_key_file.write(encrypted_key)
 
 

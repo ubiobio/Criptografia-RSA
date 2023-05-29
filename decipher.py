@@ -18,13 +18,19 @@ from cryptography.hazmat.primitives import serialization
 
 
 def read_file(filename):
+    """Leer un archivo.
+
+    Argumentos:
+    filename -- nombre del archivo
+    """
+
     with open(filename, 'rb') as file:
         return file.read()
 
 
-def decrypt_rsa(ciphertext, private_key):
+def decrypt_aes(encrypted_aes_key, private_key):
     plaintext = private_key.decrypt(
-        ciphertext,
+        encrypted_aes_key,
         asymmetric_padding.OAEP(
             mgf=asymmetric_padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
@@ -34,8 +40,14 @@ def decrypt_rsa(ciphertext, private_key):
     return plaintext
 
 
-def decrypt_aes(ciphertext, key, iv):
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+def decrypt_ciphertext(ciphertext, aes_key, iv):
+    """Desencriptar mensaje encriptado con llave AES y vector IV.
+
+    ciphertext -- texto cifrado
+    aes_key -- llave AES
+    iv -- vector IV
+    """
+    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     padded_plaintext = decryptor.update(ciphertext) + decryptor.finalize()
 
@@ -46,6 +58,12 @@ def decrypt_aes(ciphertext, key, iv):
 
 
 def verify_signature(message, signature, public_key):
+    """Verificar la firma del mensaje con una llave pública.
+
+    message -- el mensaje
+    signature -- la firma
+    public_key -- llave RSA pública
+    """
     public_key.verify(
         signature,
         message,
@@ -58,8 +76,7 @@ def verify_signature(message, signature, public_key):
 
 
 def main():
-    """Descifrar un mensaje con llave RSA
-    """
+    """Descifrar un mensaje con llave RSA"""
 
     p = optparse.OptionParser("%prog --public-key [path] --private-key [path]")
     p.add_option('--public-key', dest='public_key', type='string')
@@ -76,12 +93,12 @@ def main():
         p.print_usage()
         exit(0)
 
-    message_filename = "decipher/TextoCifrado.txt"
+    message_filename = "decipher/ciphertext.txt"
     signature_filename = "decipher/signature.sig"
     iv_filename = "decipher/IV.iv"
-    encrypted_aes_key_filename = "decipher/llave_AES_cifrada.key"
-    alice_public_key_filename = options.public_key  # Alice
-    bob_private_key_filename = options.private_key  # Bob
+    encrypted_aes_key_filename = "decipher/aes_key.enc"
+    alice_public_key_filename = options.public_key
+    bob_private_key_filename = options.private_key
 
     # Leer los archivos
     message = read_file(message_filename)
@@ -89,22 +106,24 @@ def main():
     encrypted_aes_key = read_file(encrypted_aes_key_filename)
     iv = read_file(iv_filename)
 
-    # Cargar llaves
+    # Cargar llave RSA pública
     with open(alice_public_key_filename, "rb") as key_file:
         alice_public_key = serialization.load_pem_public_key(
             key_file.read()
         )
+
+    # Cargar llave RSA privada
     with open(bob_private_key_filename, "rb") as key_file:
         bob_private_key = serialization.load_pem_private_key(
             key_file.read(),
             password=None
         )
 
-    # Descifrar la llave AES cifrada con la llave privada de Bob
-    aes_key = decrypt_rsa(encrypted_aes_key, bob_private_key)
+    # Descifrar llave AES cifrada con una llave privada
+    aes_key = decrypt_aes(encrypted_aes_key, bob_private_key)
 
-    # Descifrar el texto cifrado de Alice con la llave AES
-    plaintext = decrypt_aes(message, aes_key, iv)
+    # Descifrar texto cifrado con la llave AES
+    plaintext = decrypt_ciphertext(message, aes_key, iv)
 
     try:
         # Verificar la firma del mensaje
