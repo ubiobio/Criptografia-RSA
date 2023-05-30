@@ -90,7 +90,7 @@ def verify_signature(message, signature, public_key):
 def main():
     """Descifrar un mensaje con llave RSA"""
 
-    parser = optparse.OptionParser("%prog --public-key [path] --private-key [path]")
+    parser = optparse.OptionParser("%prog --public-key <path> --private-key <path> -p [password]")
     parser.add_option('--public-key', dest='public_key', type='string')
     parser.add_option('--private-key', dest='private_key', type='string')
     parser.add_option("-p", dest='password', type="string")

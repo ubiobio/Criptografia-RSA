@@ -117,7 +117,7 @@ def main():
     """Cifrador RSA
     """
 
-    parser = optparse.OptionParser("%prog --private-key [path] --public-key [path]")
+    parser = optparse.OptionParser("%prog --private-key <path> --public-key <path> -p [password]")
     parser.add_option('--private-key', dest='private_key', type='string')
     parser.add_option('--public-key', dest='public_key', type='string')
     parser.add_option("-p", dest='password', type='string')
