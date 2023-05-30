@@ -39,7 +39,7 @@ Luego de generar las llaves, ambos usuarios intercambian llaves públicas.
 Alice le envía su llave pública a Bob, y viceversa.
 
 Después de generar las llaves y hacer el intercambio de las públicas, Alice
-puede encriptar un mensaje utilizando el script cipher.py, pasando su
+puede encriptar un mensaje utilizando el script `cipher.py`, pasando su
 llave privada y la llave pública de Bob como argumentos.
 
 Una vez encriptado el mensaje, se generarán varios archivos dentro del
@@ -52,7 +52,7 @@ directorio `cipher/`:
 Estos archivos deberán ser enviados a Bob para que este, con su llave privada,
 pueda desencritpar el mensaje encriptado por Alice.
 
-Para desencriptar el mensaje, Bob puede usar el script decipher.py, pasando la
+Para desencriptar el mensaje, Bob puede usar el script `decipher.py`, pasando la
 llave pública de Alice y su llave privada como argumentos. Los archivos
 originalmente generados por Alice deben encontrarse en el directorio `decipher/`
 de Bob antes de proceder con la desencriptación.
