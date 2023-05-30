@@ -95,7 +95,7 @@ def encrypt_text(text, key, iv_vector):
 
 
 def sign_text(text, private_key):
-    """Firma text plano utilizando una llave privada.
+    """Firma texto plano utilizando una llave privada.
 
     Argumentos:
     text -- texto plano
