@@ -137,13 +137,13 @@ def main():
             password=options.password
         )
 
-    # Descifrar llave AES cifrada con una llave privada
-    aes_key = decrypt_aes(encrypted_aes_key, bob_private_key)
-
-    # Descifrar texto cifrado con la llave AES
-    plaintext = decrypt_ciphertext(message, aes_key, iv_vector)
-
     try:
+        # Descifrar llave AES cifrada con una llave privada
+        aes_key = decrypt_aes(encrypted_aes_key, bob_private_key)
+
+        # Descifrar texto cifrado con la llave AES
+        plaintext = decrypt_ciphertext(message, aes_key, iv_vector)
+
         # Verificar la firma del mensaje
         verify_signature(plaintext, signature, alice_public_key)
         print("La firma es válida. El mensaje es genuino.")
