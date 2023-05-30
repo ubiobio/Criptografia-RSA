@@ -21,8 +21,8 @@ Uso
 ---
 ```
 python keygen.py
-python ciper.py --private-key alice.pem --public-key bob.pub -p [password]
-python deciper.py --public-key alice.pub --private-key bob.pem -p [password]
+python cipher.py --private-key alice.pem --public-key bob.pub -p [password]
+python decipher.py --public-key alice.pub --private-key bob.pem -p [password]
 ```
 
 Explicación
